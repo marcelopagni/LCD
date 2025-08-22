@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  fast-api:
+    image: image-fastapi
+    build: ./app
+    container_name: fastapi-app
+    ports:
+      - "8000:8000"
+    networks:
+      - my-network
+
+  mysql:
+    image: mysql:8.0.19
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - my-network
+    environment:
+      MYSQL_ROOT_PASSWORD: holamono
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.0.2
+    networks:
+      - my-network
+    ports:
+      - "9501:80"
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      - mysql
+  
+networks:
+  my-network:
