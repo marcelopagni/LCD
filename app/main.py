@@ -22,13 +22,13 @@ def get_coords(coord_A:float ,coord_B:float):
     mapa = folium.Map(location=[lat, lon], zoom_start = 15)
 
     # Add a marker to the map (optional)
-    folium.Marker([-37.272754406138894, -56.97811560712071], icon=folium.Icon(color='green'), popup="Mi Casa").add_to(mapa)
+    folium.Marker([-33.32532966247154, -66.307608038267], icon=folium.Icon(color='green'), popup="Mi Casa").add_to(mapa)
 
     # Añade un marcador
     folium.Marker(
-        location=[-37.27248159475287, -56.9781009466294],
+        location=[-33.33588710719352, -66.30433207219897],
         popup='Lo de Tarzan',
-        icon=folium.Icon(color='blue')
+        icon=folium.Icon(icon="home", color="purple", icon_color="blue", prefix="fa")
     ).add_to(mapa)
 
     map_html = mapa._repr_html_()
