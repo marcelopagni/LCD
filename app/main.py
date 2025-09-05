@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Response, Request # type: ignore
 
 import folium # type: ignore
-import json
+import geopandas as gpd 
 
 app = FastAPI()
 
@@ -13,6 +13,26 @@ def read_root():
 def get_item(item_id: int):
     # Lógica para obtener el item_id de la base de datos
     return {"item": f"Elemento con ID {item_id}"}
+
+@app.get("/mapa")
+def get_mapa():
+    # Lógica para generar el mapa
+    # mapa = folium.Map(location=[-33.337528338594026, -66.30829314167931], zoom_start=8, tiles='cartodb positron')
+
+    ruta_shape = "/shape_files/ign_departamento.shp"
+    #dptos = gpd.read_file(ruta_shape)
+
+    # tipos = dptos
+    # columnas = dptos.columns
+    # geom = dptos.geometry
+
+    #map_html = mapa._repr_html_(tipos, columnas, geom)
+
+    #tipos = "tipos de datos: " + str(type(dptos)) + "\n columnas: " + str(dptos.columns) + "\n geoseries: " + str(type(dptos.geometry))
+    
+    # Return the HTML as a FastAPI Response with the correct media type
+    # return Response(content=map_html, media_type="text/html")
+    return "hola mono"
 
 @app.post("/clickCoords")
 async def get_coords(request: Request):

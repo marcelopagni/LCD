@@ -1,0 +1,40 @@
+from fastapi import FastAPI, Response
+
+import folium
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "¡Bienvenido a la aplicación del Cuaderno de Campo Digital!"}
+
+@app.get("/items/{item_id}")
+def get_item(item_id: int):
+    # Lógica para obtener el item_id de la base de datos
+    return {"item": f"Elemento con ID {item_id}"}
+
+
+@app.get("/coord/{coord_A}/{coord_B}") # -33.337528338594026/-66.30829314167931
+def get_coords(coord_A:float ,coord_B:float):
+    #paso las coordenadas del mapa
+    lat = coord_A
+    lon = coord_B
+    mapa = folium.Map(location=[lat, lon], zoom_start = 15)
+
+    # Add a marker to the map (optional)
+    folium.Marker([-33.32532966247154, -66.307608038267], icon=folium.Icon(color='red', con_color="black"), popup="Mi Casa").add_to(mapa)
+
+    # Añade un marcador
+    folium.Marker(
+        location=[-33.344976308695585, -66.26681749851481],
+        popup='Piedras raras',
+        icon=folium.Icon(icon="camera", color="red", con_color="black", iprefix="fa") # con_color="black", 
+    ).add_to(mapa)
+
+
+
+    map_html = mapa._repr_html_()
+    
+
+    # Return the HTML as a FastAPI Response with the correct media type
+    return Response(content=map_html, media_type="text/html")
