@@ -17,22 +17,30 @@ def get_item(item_id: int):
 @app.get("/mapa")
 def get_mapa():
     # Lógica para generar el mapa
-    # mapa = folium.Map(location=[-33.337528338594026, -66.30829314167931], zoom_start=8, tiles='cartodb positron')
 
-    ruta_shape = "/shape_files/ign_departamento.shp"
-    #dptos = gpd.read_file(ruta_shape)
+    mapa = folium.Map(location=[-33.337528338594026, -66.30829314167931], zoom_start=8, tiles='cartodb positron')
 
-    # tipos = dptos
-    # columnas = dptos.columns
-    # geom = dptos.geometry
+    aflRoc_ruta = "shape_files/edafologia_afloramiento_rocoso/edafologia_afloramiento_rocosoPolygon.shp"
+    aflRoc = gpd.read_file(aflRoc_ruta)
 
-    #map_html = mapa._repr_html_(tipos, columnas, geom)
+    # GeoJSON
+    geoPath = aflRoc.geometry.to_json()
+    poligonos = folium.features.GeoJson(geoPath, name="Afloramientos rocosos")
+    mapa.add_child(poligonos)
 
-    #tipos = "tipos de datos: " + str(type(dptos)) + "\n columnas: " + str(dptos.columns) + "\n geoseries: " + str(type(dptos.geometry))
-    
-    # Return the HTML as a FastAPI Response with the correct media type
-    # return Response(content=map_html, media_type="text/html")
-    return "hola mono"
+    # tipos = str(type(aflRoc))
+    # columnas = str(aflRoc.columns)
+    # geom = str(type(aflRoc.geometry))
+
+    return Response(content=mapa._repr_html_(), media_type="text/html")
+
+    # Return a JSON as a FastAPI Response with some data of the shp file
+#    return {
+#            "afloramiento" : str(type(aflRoc)),
+#            "columnas" : str(aflRoc.columns),
+#            "geometry" : str(type(aflRoc.geometry))
+#        }
+
 
 @app.post("/clickCoords")
 async def get_coords(request: Request):
